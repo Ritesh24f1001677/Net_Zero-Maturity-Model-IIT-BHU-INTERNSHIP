@@ -1,4 +1,4 @@
-# suggestion_engine.py
+# suggestion_engine1.py
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -11,12 +11,12 @@ CUSTOM_BASE_URL = "https://aipipe.org/openai/v1"
 # Initialize OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY, base_url=CUSTOM_BASE_URL)
 
-def generate_dynamic_suggestion(score, max_score):
+def generate_dynamic_suggestion_knowledge(score, max_score):
     """
-    Generate personalized suggestions for a user based on score.
+    Generate personalized suggestions for Knowledge & Capabilities level.
     """
     prompt = f"""
-    The user has scored {score} out of {max_score} in Awareness & Engagement.
+    The user has scored {score} out of {max_score} in Knowledge & Capabilities.
     Generate 3-5 personalized sustainability recommendations for this user.
     Make them clear, actionable, and motivating.
     """

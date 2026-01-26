@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "MSME Net Zero Emission Maturity Assessment",
+    "version": "1.0",
+    "description": "Questionnaire reorganized with categories treated as levels, fully bilingual (EN/HI), professionally framed questions."
+  },
+
+  "levels": {
+    "1": {"en": "Awareness and Engagement", "hi": "जागरूकता और भागीदारी"},
+    "2": {"en": "Knowledge & Capabilities", "hi": "ज्ञान और क्षमताएँ"},
+    "3": {"en": "Planning & Strategies", "hi": "योजना और रणनीतियाँ"},
+    "4": {"en": "Physical Actions (Implementation)", "hi": "भौतिक क्रियाएँ (कार्यान्वयन)"}
+  },
+
+  "categories_as_levels": {
+    "1": {
+      "name": {"en": "Awareness and Engagement", "hi": "जागरूकता और भागीदारी"},
+      "questions": [
+        {"id": 1, "text": {"en": "Are the employees aware of the concept of Net Zero Emissions (NZE)?", "hi": "क्या कर्मचारी नेट ज़ीरो उत्सर्जन (NZE) की अवधारणा से परिचित हैं?"}, "options": {"aware": {"en": "Aware", "hi": "जागरूक", "score": 1}, "somewhat aware": {"en": "Somewhat Aware", "hi": "कुछ हद तक जागरूक", "score": 0.66}, "not so aware": {"en": "Not So Aware", "hi": "ज्यादा जागरूक नहीं", "score": 0.33}, "not at all aware": {"en": "Not at All Aware", "hi": "बिलकुल भी जागरूक नहीं", "score": 0}}},
+
+        {"id": 2, "text": {"en": "Are employees aware of the Indian government's commitment to achieve the NZE target by 2070?", "hi": "क्या कर्मचारी भारतीय सरकार की 2070 तक NZE लक्ष्य प्राप्त करने की प्रतिबद्धता से परिचित हैं?"}, "options": {"aware": {"en": "Aware", "hi": "जागरूक", "score": 1}, "somewhat aware": {"en": "Somewhat Aware", "hi": "कुछ हद तक जागरूक", "score": 0.66}, "not so aware": {"en": "Not So Aware", "hi": "ज्यादा जागरूक नहीं", "score": 0.33}, "not at all aware": {"en": "Not at All Aware", "hi": "बिलकुल भी जागरूक नहीं", "score": 0}}},
+
+        {"id": 3, "text": {"en": "Do employees understand the implications of climate change and carbon emissions on business operations?", "hi": "क्या कर्मचारी जलवायु परिवर्तन और कार्बन उत्सर्जन के व्यवसाय पर प्रभाव को समझते हैं?"}, "options": {"aware": {"en": "Aware", "hi": "जागरूक", "score": 1}, "somewhat aware": {"en": "Somewhat Aware", "hi": "कुछ हद तक जागरूक", "score": 0.66}, "not so aware": {"en": "Not So Aware", "hi": "ज्यादा जागरूक नहीं", "score": 0.33}, "not at all aware": {"en": "Not at All Aware", "hi": "बिलकुल भी जागरूक नहीं", "score": 0}}},
+
+        {"id": 4, "text": {"en": "Are employees aware of the negative environmental impacts caused by your MSME and measures to mitigate them?", "hi": "क्या कर्मचारी अपने MSME द्वारा उत्पन्न नकारात्मक पर्यावरणीय प्रभाव और उन्हें कम करने के उपायों से परिचित हैं?"}, "options": {"aware": {"en": "Aware", "hi": "जागरूक", "score": 1}, "somewhat aware": {"en": "Somewhat Aware", "hi": "कुछ हद तक जागरूक", "score": 0.66}, "not so aware": {"en": "Not So Aware", "hi": "ज्यादा जागरूक नहीं", "score": 0.33}, "not at all aware": {"en": "Not at All Aware", "hi": "बिलकुल भी जागरूक नहीं", "score": 0}}},
+
+        {"id": 5, "text": {"en": "Are employees familiar with the concepts of carbon emissions and carbon footprint?", "hi": "क्या कर्मचारी कार्बन उत्सर्जन और कार्बन फ़ुटप्रिंट की अवधारणा से परिचित हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 6, "text": {"en": "Has your MSME conducted or participated in workshops or awareness programs related to NZE?", "hi": "क्या आपका MSME NZE से संबंधित कार्यशालाओं या जागरूकता कार्यक्रमों में भाग ले चुका है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 7, "text": {"en": "Does your MSME conduct regular training sessions on environmental care related to carbon emissions?", "hi": "क्या आपका MSME कार्बन उत्सर्जन से संबंधित पर्यावरण देखभाल पर नियमित प्रशिक्षण सत्र आयोजित करता है?"}, "options": {"trimonthly": {"en": "Yes (Trimonthly/Bimonthly)","hi": "हाँ (त्रैमासिक/द्वैमासिक)","score": 1},"half_yearly": {"en": "Yes (Half yearly)","hi": "हाँ (अर्धवार्षिक)","score": 1},"yearly": {"en": "Yes (Yearly)","hi": "हाँ (वार्षिक)","score": 1},"no": {"en": "No","hi": "नहीं","score": 0}}}
+      ]
+    },
+
+    "2": {
+      "name": {"en": "Knowledge & Capabilities", "hi": "ज्ञान और क्षमताएँ"},
+      "questions": [
+        {"id": 8, "text": {"en": "Do employees have knowledge about renewable energy sources?", "hi": "क्या कर्मचारियों को नवीकरणीय ऊर्जा स्रोतों का ज्ञान है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 9, "text": {"en": "Do employees understand sustainable or alternative fuels?", "hi": "क्या कर्मचारी सतत या वैकल्पिक ईंधनों को समझते हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 10, "text": {"en": "Do employees know about energy efficiency measures?", "hi": "क्या कर्मचारियों को ऊर्जा दक्षता उपायों का ज्ञान है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 11, "text": {"en": "Do employees understand the concept of decarbonization?", "hi": "क्या कर्मचारी डीकार्बोनाइजेशन की अवधारणा को समझते हैं?"}, "options": {"understand": {"en": "Understand", "hi": "समझते हैं", "score": 1}, "moderately understand": {"en": "Moderately Understand", "hi": "मध्यम रूप से समझते हैं", "score": 0.66}, "only heard of": {"en": "Only Heard Of", "hi": "सिर्फ सुना है", "score": 0.33}, "don't understand": {"en": "Don't Understand", "hi": "समझते नहीं हैं", "score": 0}}},
+
+        {"id": 12, "text": {"en": "Are MSMEs aware of government policies that help achieve NZE targets?", "hi": "क्या MSME सरकारी नीतियों से परिचित हैं जो NZE लक्ष्य प्राप्त करने में मदद करती हैं?"}, "options": {"know": {"en": "Know", "hi": "जानते हैं", "score": 1}, "somewhat know": {"en": "Somewhat Know", "hi": "कुछ हद तक जानते हैं", "score": 0.66}, "heard of": {"en": "Heard Of", "hi": "सुना है", "score": 0.33}, "don't know": {"en": "Don't Know", "hi": "नहीं जानते", "score": 0}}},
+
+        {"id": 13, "text": {"en": "Are environmental policies clear enough for implementation in your MSME?", "hi": "क्या आपके MSME में पर्यावरणीय नीतियाँ लागू करने के लिए पर्याप्त स्पष्ट हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 14, "text": {"en": "Do employees understand the concept of a circular economy?", "hi": "क्या कर्मचारी सर्कुलर अर्थव्यवस्था की अवधारणा को समझते हैं?"}, "options": {"understand": {"en": "Understand", "hi": "समझते हैं", "score": 1}, "moderately understand": {"en": "Moderately Understand", "hi": "मध्यम रूप से समझते हैं", "score": 0.66}, "only heard of": {"en": "Only Heard Of", "hi": "सिर्फ सुना है", "score": 0.33}, "don't understand": {"en": "Don't Understand", "hi": "समझते नहीं हैं", "score": 0}}},
+
+        {"id": 15, "text": {"en": "Do employees understand the principles of cleaner production?", "hi": "क्या कर्मचारी क्लीनर प्रोडक्शन के सिद्धांतों को समझते हैं?"}, "options": {"understand": {"en": "Understand", "hi": "समझते हैं", "score": 1}, "moderately understand": {"en": "Moderately Understand", "hi": "मध्यम रूप से समझते हैं", "score": 0.66}, "only heard of": {"en": "Only Heard Of", "hi": "सिर्फ सुना है", "score": 0.33}, "don't understand": {"en": "Don't Understand", "hi": "समझते नहीं हैं", "score": 0}}},
+
+        {"id": 16, "text": {"en": "Does your MSME have sufficient human resources to acquire knowledge about achieving NZE?", "hi": "क्या आपके MSME के पास NZE ज्ञान प्राप्त करने के लिए पर्याप्त मानव संसाधन हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 17, "text": {"en": "Does your MSME have sufficient financial resources to acquire knowledge about achieving NZE?", "hi": "क्या आपके MSME के पास NZE ज्ञान प्राप्त करने के लिए पर्याप्त वित्तीय संसाधन हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 18, "text": {"en": "Does your MSME have sufficient technological resources to acquire knowledge about achieving NZE?", "hi": "क्या आपके MSME के पास NZE ज्ञान प्राप्त करने के लिए पर्याप्त तकनीकी संसाधन हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 19, "text": {"en": "Does your MSME have sufficient physical resources to acquire knowledge about achieving NZE?", "hi": "क्या आपके MSME के पास NZE ज्ञान प्राप्त करने के लिए पर्याप्त भौतिक संसाधन हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 20, "text": {"en": "Does your MSME have the capability to measure greenhouse gas (GHG) emissions?", "hi": "क्या आपके MSME में ग्रीनहाउस गैस (GHG) उत्सर्जन को मापने की क्षमता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}}
+      ]
+    },
+
+    "3": {
+      "name": {"en": "Planning & Strategies", "hi": "योजना और रणनीतियाँ"},
+      "questions": [
+        {"id": 21, "text": {"en": "Does your MSME have an action plan or program to achieve NZE?", "hi": "क्या आपके MSME के पास NZE प्राप्त करने के लिए कोई कार्य योजना या कार्यक्रम है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 22, "text": {"en": "Has your MSME set targets to reduce carbon emissions in the future?", "hi": "क्या आपके MSME ने भविष्य में कार्बन उत्सर्जन कम करने के लक्ष्य निर्धारित किए हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 23, "text": {"en": "Does your MSME maintain detailed statistical records of expenditures such as power, fuel, water, and travel?", "hi": "क्या आपके MSME ने बिजली, ईंधन, पानी और यात्रा जैसे खर्चों के विस्तृत सांख्यिकीय रिकॉर्ड रखे हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 24, "text": {"en": "How would you rate the priority of decarbonization initiatives in your MSME?", "hi": "आप अपने MSME में डीकार्बोनाइजेशन पहलों की प्राथमिकता को कैसे आंकेंगे?"}, "options": {"option1": {"en": "Decarbonization is the most important priority", "hi": "डीकार्बोनाइजेशन सबसे महत्वपूर्ण प्राथमिकता है।","score":1}, "option2": {"en": "Decarbonization is a top priority, but not the most important", "hi": "डीकार्बोनाइजेशन एक शीर्ष प्राथमिकता है, लेकिन सबसे महत्वपूर्ण नहीं।","score":1}, "option3": {"en": "Decarbonization is moderately important", "hi": "डीकार्बोनाइजेशन मध्यम रूप से महत्वपूर्ण है।","score":1}, "option4": {"en": "Decarbonization is not important at all", "hi": "डीकार्बोनाइजेशन बिल्कुल भी महत्वपूर्ण नहीं है।","score":0}}},
+
+        {"id": 25, "text": {"en": "Does your MSME give weight to environmental criteria when selecting suppliers for raw materials?", "hi": "क्या आपके MSME कच्चे माल के आपूर्तिकर्ताओं का चयन करते समय पर्यावरणीय मानदंडों को महत्व देता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 26, "text": {"en": "Has your MSME received any environmental certifications?", "hi": "क्या आपके MSME ने कोई पर्यावरणीय प्रमाणन प्राप्त किया है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}}
+      ]
+    },
+
+    "4": {
+      "name": {"en": "Physical Actions (Implementation)", "hi": "भौतिक क्रियाएँ (कार्यान्वयन)"},
+      "questions": [
+        {"id": 27, "text": {"en": "Do employees actively use renewable sources of energy?", "hi": "क्या कर्मचारी सक्रिय रूप से नवीकरणीय ऊर्जा स्रोतों का उपयोग करते हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 28, "text": {"en": "Do employees actively use sustainable or alternative fuels?", "hi": "क्या कर्मचारी सतत या वैकल्पिक ईंधनों का उपयोग करते हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 29, "text": {"en": "Are energy efficiency measures implemented in your MSME?", "hi": "क्या आपके MSME में ऊर्जा दक्षता उपाय लागू किए गए हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 30, "text": {"en": "Does your MSME have a system to monitor and reduce carbon emissions?", "hi": "क्या आपके MSME में कार्बन उत्सर्जन की निगरानी और कम करने के लिए कोई प्रणाली है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 31, "text": {"en": "Does your MSME regularly implement environmental initiatives?", "hi": "क्या आपके MSME नियमित रूप से पर्यावरणीय पहलों को लागू करता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 32, "text": {"en": "Whether MSME uses electric vehicles?", "hi": "क्या MSME इलेक्ट्रिक वाहनों का उपयोग करता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 33, "text": {"en": "Does the MSME support post-purchase repair services to increase a product's lifespan?", "hi": "क्या MSME खरीदे गए उत्पादों के जीवन को बढ़ाने के लिए मरम्मत सेवाएँ प्रदान करता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 34, "text": {"en": "MSMEs retrieve the items that their customers no longer utilize.", "hi": "क्या MSME ग्राहक द्वारा अप्रयुक्त वस्तुओं को वापस लेता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+
+        {"id": 35, "text": {"en": "Employees tend to reuse office stationery materials and other reusable things.", "hi": "क्या कर्मचारी कार्यालय स्टेशनरी और अन्य पुन: प्रयोज्य सामग्री का पुन: उपयोग करते हैं?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}},
+        
+        {"id": 36, "text": {"en": "MSME measures its overall emissions.", "hi": "क्या MSME अपने कुल उत्सर्जन को मापता है?"}, "options": {"yes": {"en": "Yes", "hi": "हाँ", "score": 1}, "no": {"en": "No", "hi": "नहीं", "score": 0}}}
+      ]
+    }
+  }
+}
+    

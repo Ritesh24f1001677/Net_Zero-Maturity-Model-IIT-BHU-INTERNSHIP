@@ -12,10 +12,15 @@ from datetime import datetime
 import json
 import os
 from functools import wraps
-
 from models import db, User, Response
+from flask import Blueprint, render_template, request
+from suggestion_engine5 import generate_tips_and_resources
 from suggestion_engine import generate_dynamic_suggestion
-
+from suggestion_engine1 import generate_dynamic_suggestion_knowledge
+from suggestion_engine2 import generate_dynamic_suggestion_planning
+from suggestion_engine3 import generate_dynamic_suggestion_advanced
+from suggestion_engine4 import generate_total_suggestion
+import markdown
 
 def register_routes(app):
     # ----------------------------------------------------------------------
@@ -340,22 +345,27 @@ def register_routes(app):
 
         session['levels_unlocked'] = levels_unlocked
 
-        last_attempt = current_attempt - 1
-        if last_attempt >= 1:
-            last_count = Response.query.filter_by(
-                user_id=current_user.id,
-                attempt_number=last_attempt
-            ).count()
-            if last_count == 4:
-                flash(f"Starting new attempt #{current_attempt}", "info")
+        # Only flash "new attempt" message once
+        new_attempt_flash_key = f"new_attempt_flash_{current_user.id}_{current_attempt}"
+        if not session.get(new_attempt_flash_key):
+            last_attempt = current_attempt - 1
+            if last_attempt >= 1:
+                last_count = Response.query.filter_by(
+                    user_id=current_user.id,
+                    attempt_number=last_attempt
+                ).count()
+                if last_count == 4:
+                    flash(f"Starting new attempt #{current_attempt}", "info")
+                    session[new_attempt_flash_key] = True
 
         return render_template("questionnaire_index.html",
-                               translations=t,
-                               completed_levels=completed_levels,
-                               levels_unlocked=levels_unlocked,
-                               categories_as_levels=CATEGORIES_AS_LEVELS,
-                               levels=LEVELS,
-                               current_lang=current_language())
+                            translations=t,
+                            completed_levels=completed_levels,
+                            levels_unlocked=levels_unlocked,
+                            categories_as_levels=CATEGORIES_AS_LEVELS,
+                            levels=LEVELS,
+                            current_lang=current_language())
+
 
     # --------------------------
     # Questionnaire Level
@@ -547,55 +557,358 @@ def register_routes(app):
     @app.route("/performance_insights")
     @login_required
     def performance_insights():
-
+        # Fetch all responses of the user, ordered by attempt number
         responses = Response.query.filter_by(
             user_id=current_user.id
-        ).order_by(Response.attempt_number).all()
+        ).order_by(Response.attempt_number, Response.level).all()
 
-        attempts = [r.attempt_number for r in responses]
-        unique_attempts = sorted(list(set(attempts)))
+        # Full lists for charts and tables
+        attempts = [r.attempt_number for r in responses]  # use full array
         scores = [r.score for r in responses]
         levels = [r.level for r in responses]
         maturity = [r.maturity_level for r in responses]
         dates = [r.created_at.strftime("%d %b %Y") for r in responses]
 
-        group_names = []
-        for lvl in levels:
-            if lvl == 1:
-                group_names.append("Awareness and Engagement")
-            elif lvl == 2:
-                group_names.append("Knowledge & Capabilities")
-            elif lvl == 3:
-                group_names.append("Planning & Strategies")
-            elif lvl == 4:
-                group_names.append("Physical Actions")
-            else:
-                group_names.append("Unknown")
+        # Map levels to group names
+        LEVEL_GROUP_NAMES = {
+            1: "Awareness and Engagement",
+            2: "Knowledge & Capabilities",
+            3: "Planning & Strategies",
+            4: "Physical Actions"
+        }
+        group_names = [LEVEL_GROUP_NAMES.get(lvl, "Unknown") for lvl in levels]
 
-        return render_template("performance_insights.html",
-                               attempts=unique_attempts,
-                               scores=scores,
-                               levels=levels,
-                               group_names=group_names,
-                               maturity=maturity,
-                               dates=dates,
-                               translations=TRANSLATIONS.get(
-                                   current_language(),
-                                   TRANSLATIONS['en']
-                               ))
+        return render_template(
+            "performance_insights.html",
+            attempts=attempts,  # full list instead of unique
+            scores=scores,
+            levels=levels,
+            group_names=group_names,
+            maturity=maturity,
+            dates=dates,
+            translations=TRANSLATIONS.get(current_language(), TRANSLATIONS['en'])
+        )
 
+    @app.route("/suggestions/awareness_engagement")
+    @login_required
+    def suggestions_awareness_engagement():
+        # Call the reusable render function for level 1
+        return render_suggestions_for_level(level=1, level_name="Awareness & Engagement")
+
+    def render_suggestions_for_level(level, level_name):
+        """
+        Reusable function to render suggestions for a specific level.
+        """
+        translations = {
+            "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+        }
+        # Get the latest response for this user and level
+        last_response = Response.query.filter_by(user_id=current_user.id, level=level)\
+                        .order_by(Response.score.desc()).first()
+
+        if last_response:
+            score = last_response.score
+            try:
+                max_score = json.loads(last_response.details)["_summary"]["score_max"]
+            except (KeyError, TypeError, json.JSONDecodeError):
+                max_score = 7  # default max score
+        else:
+            score = 0
+            max_score = 7  # default max score
+
+        # Calculate percentage
+        percentage = (score / max_score * 100) if max_score else 0
+        import markdown
+        # Generate AI-based personalized suggestions
+        raw_suggestions = generate_dynamic_suggestion(score, max_score)
+
+        # Convert Markdown → HTML
+        suggestions_html = markdown.markdown(
+           raw_suggestions,
+           extensions=["extra"]
+        )
+        #suggestions_text = generate_dynamic_suggestion(score, max_score)
+
+        # Render template
+        return render_template(
+            "suggestion_awareness_engagement.html",
+            score=score,
+            max_score=max_score,
+            percentage=percentage,
+            suggestions=suggestions_html,
+            level_name=level_name,
+            translations=translations
+        )
+    
+
+
+    @app.route("/suggestions/knowledge_capabilities")
+    @login_required
+    def suggestions_knowledge_capabilities():
+        return render_suggestions_for_level_knowledge(level=2, level_name="Knowledge & Capabilities")
+
+
+    def render_suggestions_for_level_knowledge(level, level_name):
+        """
+        Render suggestions for Knowledge & Capabilities level using suggestion_engine1.py
+        """
+        translations = {
+            "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+        }
+
+        # Get latest response for this user and level
+        last_response = Response.query.filter_by(user_id=current_user.id, level=level)\
+                                    .order_by(Response.score.desc()).first()
+
+        if last_response:
+            score = last_response.score
+            try:
+                max_score = json.loads(last_response.details)["_summary"]["score_max"]
+            except (KeyError, TypeError, json.JSONDecodeError):
+                max_score = 13  # default max score
+        else:
+            score = 0
+            max_score = 13
+        percentage = (score / max_score * 100) if max_score else 0
+
+        raw_suggestions = generate_dynamic_suggestion_knowledge(score, max_score)
+        suggestions_html = markdown.markdown(
+           raw_suggestions,
+           extensions=["extra"]
+        )
+
+        return render_template(
+            "suggestion_knowledge_capabilities.html",
+            score=score,
+            max_score=max_score,
+            percentage=percentage,
+            suggestions=suggestions_html,
+            level_name=level_name,
+            translations=translations
+        )
+    
+
+    @app.route("/suggestions/planning_strategies")
+    @login_required
+    def suggestions_planning_strategies():
+        """
+        Route to display the Planning & Strategies suggestions for the current user.
+        """
+        return render_suggestions_for_level_planning(level=3, level_name="Planning & Strategies")
+
+
+    # -----------------------------
+    # Reusable render function for Planning & Strategies
+    # -----------------------------
+    def render_suggestions_for_level_planning(level, level_name):
+        """
+        Render suggestions for Planning & Strategies level using suggestion_engine2.py
+        """
+        translations = {
+            "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+        }
+
+        last_response = Response.query.filter_by(user_id=current_user.id, level=level)\
+                                    .order_by(Response.score.desc()).first()
+
+        if last_response:
+            score = last_response.score
+            try:
+                max_score = json.loads(last_response.details)["_summary"]["score_max"]
+            except (KeyError, TypeError, json.JSONDecodeError):
+                max_score = 6
+        else:
+            score = 0
+            max_score = 6
+
+        percentage = (score / max_score * 100) if max_score else 0
+        raw_suggestions = generate_dynamic_suggestion_planning(score, max_score)
+        suggestions_html = markdown.markdown(
+            raw_suggestions,
+            extensions=["extra"]
+        )
+
+        return render_template(
+            "suggestion_planning_strategies.html",
+            score=score,
+            max_score=max_score,
+            percentage=percentage,
+            suggestions=suggestions_html,
+            level_name=level_name,
+            translations=translations
+        )
+ 
+
+
+# -----------------------------
+# Route for Action & Strategies Suggestions
+# -----------------------------
+    @app.route("/suggestions/action_strategies")
+    @login_required
+    def suggestions_physical_actions():
+        """
+        Route to display the Action & Strategies suggestions for the current user.
+        """
+        return render_suggestions_for_level_action(level=4, level_name="Action & Strategies")
+
+    def render_suggestions_for_level_action(level, level_name):
+        """
+        Render suggestions for Action & Sustainability Strategies level using suggestion_engine3.py
+        """
+        translations = {
+           "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+            }
+
+        last_response = Response.query.filter_by(user_id=current_user.id, level=level) \
+                      .order_by(Response.score.desc()).first()
+
+        if last_response:
+            score = last_response.score
+            try:
+               max_score = json.loads(last_response.details)["_summary"]["score_max"]
+            except (KeyError, TypeError, json.JSONDecodeError):
+               max_score = 10
+        else:
+            score = 0
+            max_score = 10
+
+        percentage = (score / max_score * 100) if max_score else 0
+
+        from suggestion_engine3 import generate_dynamic_suggestion_advanced
+        raw_suggestions = generate_dynamic_suggestion_advanced(score, max_score)
+        suggestions_html = markdown.markdown(
+            raw_suggestions,
+            extensions=["extra"]
+        )
+
+        return render_template(
+            "suggestion_action_strategies.html",
+            score=score,
+            max_score=max_score,
+            percentage=percentage,
+            suggestions=suggestions_html,
+            level_name=level_name,
+            translations=translations
+       )
+  
+    @app.route("/suggestions/overall")
+    @login_required	
+    def suggestions_overall():
+        translations = {
+            "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+        }
+        level_max_scores = {1: 7,2: 13,3: 6,4: 10}
+        latest_attempt=(
+            db.session.query(Response.attempt_number)
+            .filter(Response.user_id == current_user.id)
+            .order_by(Response.attempt_number.desc())
+            .first()
+        )
+        if not latest_attempt:
+            return render_template(
+                "suggestion_total_score.html",
+                total_score=0,
+                total_max_score=sum(level_max_scores.values()),
+                overall_percentage=0,
+                level_scores={},
+                suggestions="No data available",
+                translations=translations
+            )
+        latest_attempt=latest_attempt[0]
+
+        responses=Response.query.filter_by(
+            user_id=current_user.id,
+            attempt_number=latest_attempt
+        ).all()
+
+        total_score = 0
+        total_max_score = sum(level_max_scores.values())
+        level_scores_details = {}
+        for level, max_score in level_max_scores.items():
+            level_score=sum(
+                r.score for r in responses if r.level == level
+            )
+            total_score += level_score
+            level_scores_details[level] = {
+                "score": level_score,
+                "max_score": max_score,
+                "percentage": (level_score / max_score * 100) if max_score else 0
+            }
+        overall_percentage = (total_score / total_max_score * 100) if total_max_score else 0
+        raw_suggestions = generate_total_suggestion(
+            total_score,
+            total_max_score
+        )
+        suggestions_html = markdown.markdown(
+            raw_suggestions,
+            extensions=["extra"]
+        )
+        #suggestions_text = generate_total_suggestion(total_score, total_max_score)
+        return render_template(
+            "suggestions_total_score.html",
+            total_score=total_score,
+            total_max_score=total_max_score,
+            overall_percentage=overall_percentage,
+            level_scores=level_scores_details,
+            suggestions=suggestions_html,
+            translations=translations
+        )
+    @app.route('/tips-resources')
+    def tips_resources():
+        translations = {
+            "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+        }
+        return render_template('tips_resources.html',
+                               translations=translations)
+        
+
+   
     # --------------------------
-    # Suggestions Page
-    # --------------------------
+    # Suggestions Dashboard
     @app.route("/suggestions")
     @login_required
     def suggestions():
-        t = TRANSLATIONS.get(current_language(), TRANSLATIONS['en'])
-        responses = Response.query.filter_by(
-            user_id=current_user.id
-        ).order_by(Response.level).all()
+        """
+        Main suggestions dashboard showing all 4 levels and extra cards.
+        """
+        # Example: define translations (or import them from your translations module)
+        translations = {
+            "home_title": "Home",
+            "questionnaire": "Questionnaire",
+            "performance": "Performance",
+            "performance_insights": "Performance Insights",
+            "suggestions": "Suggestions",
+            "profile": "Profile"
+        }
 
-        ai_suggestion = generate_dynamic_suggestion(current_user, responses)
-        return render_template("suggestions.html",
-                               translations=t,
-                               suggestion=ai_suggestion)
+        return render_template("suggestions.html", translations=translations)
