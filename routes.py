@@ -120,6 +120,7 @@ def register_routes(app):
             "questionnaire": "Questionnaire",
             "profile": "Profile",
             "performance": "Performance",
+            "performance_insights": "Performance Insights",
             "suggestions": "Suggestions",
             "documentaries": "Documentaries",
             "analysis": "Analysis",
@@ -133,6 +134,7 @@ def register_routes(app):
             "questionnaire": "प्रश्नावली",
             "profile": "प्रोफ़ाइल",
             "performance": "प्रदर्शन",
+            "performance_insights": "प्रदर्शन विश्लेषण",
             "suggestions": "सुझाव",
             "documentaries": "डॉक्यूमेंटरी",
             "analysis": "विश्लेषण",
@@ -912,3 +914,4 @@ def register_routes(app):
         }
 
         return render_template("suggestions.html", translations=translations)
+
