@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block content %}
+{% set t = translations %}
+
+<div class="container my-5">
+
+  <h2 class="fw-bold mb-4">{{ t.performance_insights or "Performance Insights" }}</h2>
+
+  <!-- ================= OVERVIEW CARDS ================= -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="card-title">{{ t.total_attempts or "Total Attempts" }}</h6>
+          <p class="card-text fs-4">{{ attempts|length }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="card-title">{{ t.avg_score or "Average Score" }}</h6>
+          <p class="card-text fs-4">
+            {{ (scores|sum / (scores|length if scores|length > 0 else 1)) | round(2) }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="card-title">{{ t.highest_score or "Highest Score" }}</h6>
+          <p class="card-text fs-4">{{ scores|max }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow-sm h-100">
+        <div class="card-body">
+          <h6 class="card-title">{{ t.lowest_score or "Lowest Score" }}</h6>
+          <p class="card-text fs-4">{{ scores|min }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TABLE ================= -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
+      <span>{{ t.attempts_table or "Attempts Overview" }}</span>
+      <span class="badge bg-light text-dark" id="pageInfo"></span>
+    </div>
+
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0" id="attemptsTable">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Attempt</th>
+            <th>Score</th>
+            <th>Group</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in range(attempts|length) %}
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ dates[i] }}</td>
+            <td>{{ attempts[i] }}</td>
+            <td>{{ scores[i] }}</td>
+            <td>{{ group_names[i] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card-footer text-center">
+      <button class="btn btn-outline-primary btn-sm me-2" onclick="prevPage()">⬅ Previous</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="nextPage()">Next ➡</button>
+    </div>
+  </div>
+
+  <!-- ================= CHARTS ================= -->
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <h5>Score Progression</h5>
+        <canvas id="scoreChart"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <h5>Top 2 Scores</h5>
+        <canvas id="topScoresChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <h5>Average Score Over Time</h5>
+        <canvas id="avgScoreChart"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <h5>Best 2 Total Scores by Attempt</h5>
+        <canvas id="totalScoreChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ================= CHART JS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+/* ---------- DATA ---------- */
+const dates = {{ dates|tojson|safe }};
+const scores = {{ scores|tojson|safe }};
+const attempts = {{ attempts|tojson|safe }};
+
+/* ---------- CANVAS CONTEXTS (FIX) ---------- */
+const scoreChartCtx = document.getElementById("scoreChart");
+const topScoresChartCtx = document.getElementById("topScoresChart");
+const avgScoreChartCtx = document.getElementById("avgScoreChart");
+const totalScoreChartCtx = document.getElementById("totalScoreChart");
+
+/* ---------- RUNNING AVERAGE ---------- */
+let runningAvg = [];
+let sum = 0;
+scores.forEach((s, i) => {
+  sum += s;
+  runningAvg.push((sum / (i + 1)).toFixed(2));
+});
+
+/* ---------- SCORE PROGRESSION ---------- */
+new Chart(scoreChartCtx, {
+  type: "line",
+  data: {
+    labels: dates,
+    datasets: [
+      { label: "Score", data: scores, borderWidth: 2, fill: true },
+      { label: "Running Average", data: runningAvg, borderDash: [5,5] }
+    ]
+  }
+});
+
+/* ---------- TOP 2 SCORES ---------- */
+let topIndices = [...scores.keys()]
+  .sort((a, b) => scores[b] - scores[a])
+  .slice(0, 2);
+
+new Chart(topScoresChartCtx, {
+  type: "bar",
+  data: {
+    labels: topIndices.map(i => `Attempt ${attempts[i]}`),
+    datasets: [{
+      label: "Score",
+      data: topIndices.map(i => scores[i])
+    }]
+  }
+});
+
+/* ---------- AVERAGE SCORE ---------- */
+new Chart(avgScoreChartCtx, {
+  type: "line",
+  data: {
+    labels: dates,
+    datasets: [{
+      label: "Average Score",
+      data: runningAvg,
+      fill: true
+    }]
+  }
+});
+
+/* ---------- BEST 2 TOTAL SCORES ---------- */
+let totals = {};
+scores.forEach((s, i) => {
+  totals[attempts[i]] = (totals[attempts[i]] || 0) + s;
+});
+
+let sortedTotals = Object.entries(totals)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 2);
+
+new Chart(totalScoreChartCtx, {
+  type: "bar",
+  data: {
+    labels: sortedTotals.map(x => `Attempt ${x[0]}`),
+    datasets: [{
+      label: "Total Score",
+      data: sortedTotals.map(x => x[1])
+    }]
+  }
+});
+
+/* ---------- TABLE PAGINATION ---------- */
+const rowsPerPage = 12;
+let currentPage = 1;
+const rows = document.querySelectorAll("#attemptsTable tbody tr");
+const totalPages = Math.ceil(rows.length / rowsPerPage);
+const pageInfo = document.getElementById("pageInfo");
+
+function showPage(page) {
+  currentPage = page;
+  rows.forEach((row, i) => {
+    row.style.display =
+      (i >= (page - 1) * rowsPerPage && i < page * rowsPerPage) ? "" : "none";
+  });
+  pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
+}
+
+function nextPage() {
+  if (currentPage < totalPages) showPage(currentPage + 1);
+}
+
+function prevPage() {
+  if (currentPage > 1) showPage(currentPage - 1);
+}
+
+showPage(1);
+</script>
+
+{% endblock %}

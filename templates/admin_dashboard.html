@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {font-family:'Poppins', sans-serif; background:#f4f7fb; color:#333; overflow-x:hidden;}
+
+    /* NAVBAR */
+    .navbar {
+        width:100%;
+        background:#0a3d62;
+        padding:12px 20px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        color:white;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        flex-wrap:wrap;
+    }
+    .navbar .title { font-size:22px; font-weight:600; }
+    .navbar a { color:white; text-decoration:none; margin-left:15px; font-size:15px; font-weight:500; }
+
+    /* MAIN CONTAINER */
+    .container {padding:30px 20px; max-width:1200px; margin:auto;}
+    h1 {font-size:28px; color:#0a3d62; margin-bottom:25px; text-align:center;}
+
+    /* STAT CARDS */
+    .stats-container {
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+        justify-content:center;
+        margin-bottom:30px;
+    }
+    .card {
+        flex:1 1 220px;
+        background:white;
+        padding:25px 20px;
+        border-radius:15px;
+        box-shadow:0 8px 20px rgba(0,0,0,0.1);
+        transition:0.3s;
+        text-align:center;
+    }
+    .card:hover { transform:translateY(-5px); box-shadow:0 12px 25px rgba(0,0,0,0.15); }
+    .card h3 { font-size:18px; margin-bottom:10px; color:#145a96; }
+    .card p { font-size:20px; font-weight:600; color:#0a3d62; }
+
+    /* TABLE STYLING */
+    .table-heading { margin:30px 0 15px 0; font-size:22px; color:#0a3d62; font-weight:600; }
+    .table-wrapper { width:100%; overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:600px; background:white; border-radius:12px; overflow:hidden; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+    th { background:#0a3d62; color:white; padding:12px 15px; text-align:left; font-size:15px; }
+    td { padding:12px 15px; font-size:14px; border-bottom:1px solid #eee; }
+    tr:hover { background:#eaf2ff; transition:0.2s; }
+    tr.level-row td { padding-left:30px; font-size:13px; background:#f9fbff; }
+
+    /* TOGGLE BUTTON */
+    .toggle-btn {
+        padding:5px 12px;
+        background:#0984e3;
+        color:white;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+        font-size:13px;
+        float:right;
+        transition:0.2s;
+    }
+    .toggle-btn:hover { background:#0652dd; }
+
+    /* FOOTER */
+    .footer { margin:30px 0; text-align:center; }
+    .logout-btn {
+        padding:12px 25px;
+        background:#d63031;
+        color:white;
+        border-radius:8px;
+        text-decoration:none;
+        font-weight:500;
+        transition:0.3s;
+    }
+    .logout-btn:hover { background:#b71c1c; }
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+        .stats-container { flex-direction:column; align-items:center; }
+        table, th, td { font-size:13px; }
+        .toggle-btn { margin-top:5px; float:none; display:block; }
+    }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="title">MSME NZE - Admin Dashboard</div>
+    <div>
+        <a href="/">Home</a>
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <h1>Welcome, Admin</h1>
+
+    <!-- STAT CARDS -->
+    <div class="stats-container">
+        <div class="card">
+            <h3>Total Registered Users</h3>
+            <p>{{ total_users }}</p>
+        </div>
+        <div class="card">
+            <h3>Total Submitted Responses</h3>
+            <p>{{ total_responses }}</p>
+        </div>
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="table-heading">Latest Registered Users</div>
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>ID</th><th>Name</th><th>Email</th>
+            </tr>
+            {% for u in recent_users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.email }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- RESPONSES TABLE -->
+    <div class="table-heading">Latest Submitted Responses</div>
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>User</th><th>Level</th><th>Score</th><th>Date</th>
+            </tr>
+            {% for user in users_with_responses %}
+            <tr style="background:#dfe6e9; font-weight:600;">
+                <td colspan="4">
+                    {{ user.name }}
+                    <button class="toggle-btn" onclick="toggleRows('user-{{ user.id }}')">Toggle Levels</button>
+                </td>
+            </tr>
+            {% for r in user.responses %}
+            <tr class="level-row user-{{ user.id }}" style="display:none;">
+                <td></td>
+                <td>Level {{ r.level }}</td>
+                <td>{{ r.score }}</td>
+                <td>{{ r.created_at.strftime('%d %b %Y') }}</td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="footer">
+        <a class="logout-btn" href="{{ url_for('admin_logout') }}">Logout</a>
+    </div>
+
+</div>
+
+<script>
+function toggleRows(className){
+    document.querySelectorAll('.' + className).forEach(row => {
+        row.style.display = row.style.display === 'none' ? '' : 'none';
+    });
+}
+</script>
+
+</body>
+</html>

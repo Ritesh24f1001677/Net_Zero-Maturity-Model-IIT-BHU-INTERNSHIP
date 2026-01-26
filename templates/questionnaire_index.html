@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>{{ translations.questionnaire }}</h3>
+
+<div class="row">
+  {% for lvl, cat in categories_as_levels.items() %}
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-header 
+          {% if lvl == '1' %} bg-info text-white
+          {% elif lvl == '2' %} bg-success text-white
+          {% elif lvl == '3' %} bg-warning text-dark
+          {% elif lvl == '4' %} bg-danger text-white
+          {% endif %}">
+          <strong>{{ cat.name[current_lang] }}</strong>
+        </div>
+        <div class="card-body">
+          <p>{{ cat.questions | length }} 
+            {% if current_lang == 'hi' %} प्रश्न {% else %} questions {% endif %}
+          </p>
+          <a href="{{ url_for('questionnaire_level', level=lvl) }}" class="btn btn-primary">
+            {% if current_lang == 'hi' %} स्तर {{ lvl }} शुरू करें {% else %} Parameter {{ lvl }} {% endif %}
+          </a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

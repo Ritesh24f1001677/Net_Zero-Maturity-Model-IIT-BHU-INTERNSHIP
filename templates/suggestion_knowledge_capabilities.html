@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="fw-bold">{{ level_name }} Suggestions</h2>
+
+    <div class="alert alert-info fs-5 mt-3">
+        Score: <b>{{ score }}/{{ max_score }}</b> ({{ "%.1f"|format(percentage) }}%)
+    </div>
+
+    <div class="card shadow-sm p-4 mt-3">
+        <h4 class="fw-bold">Your Personalized Recommendations</h4>
+        <pre style="white-space: pre-wrap; font-size: 16px;">{{ suggestions|safe}}</pre>
+    </div>
+
+    <a href="/suggestions" class="btn btn-primary mt-3">
+        ⬅ Back to Suggestions Dashboard
+    </a>
+</div>
+
+{% endblock %}

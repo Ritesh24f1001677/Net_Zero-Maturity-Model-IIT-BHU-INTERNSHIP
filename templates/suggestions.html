@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<div class="page-wrapper">
+
+    <h1 class="title">Your Personalized Sustainability Suggestions</h1>
+
+    {% set LEVEL_GROUP_NAMES = {
+        1: "Awareness & Engagement",
+        2: "Knowledge & Capabilities",
+        3: "Planning & Strategies",
+        4: "Physical Actions"
+    } %}
+
+    {% set LEVEL_ICONS = {
+        1: "fa-lightbulb",
+        2: "fa-brain",
+        3: "fa-diagram-project",
+        4: "fa-leaf"
+    } %}
+
+    {% set LEVEL_ENDPOINTS = {
+        1: "suggestions_awareness_engagement",
+        2: "suggestions_knowledge_capabilities",
+        3: "suggestions_planning_strategies",
+        4: "suggestions_physical_actions"
+    } %}
+
+    <div class="suggestions-grid-fixed">
+
+        <!-- First Row -->
+        {% for level in range(1,4) %}
+        <div class="card futuristic-card">
+            <div class="icon-circle">
+                <i class="fas {{ LEVEL_ICONS[level] }}"></i>
+            </div>
+            <h3>{{ LEVEL_GROUP_NAMES[level] }}</h3>
+            <button class="explore-btn"
+                    onclick="showLoaderAndRedirect('{{ url_for(LEVEL_ENDPOINTS[level]) }}')">
+                Explore
+            </button>
+        </div>
+        {% endfor %}
+
+        <!-- Second Row -->
+        <div class="card futuristic-card">
+            <div class="icon-circle">
+                <i class="fas {{ LEVEL_ICONS[4] }}"></i>
+            </div>
+            <h3>{{ LEVEL_GROUP_NAMES[4] }}</h3>
+            <button class="explore-btn"
+                    onclick="showLoaderAndRedirect('{{ url_for(LEVEL_ENDPOINTS[4]) }}')">
+                Explore
+            </button>
+        </div>
+
+        <div class="card futuristic-card score-bg">
+            <div class="icon-circle">
+                <i class="fas fa-gauge-high"></i>
+            </div>
+            <h3>Overall Score</h3>
+            <a href="javascript:void(0)"
+               class="explore-btn score-btn"
+               onclick="showLoaderAndRedirect('{{ url_for('suggestions_overall') }}')">
+                Explore
+            </a>
+        </div>
+
+        <div class="card futuristic-card tips-bg">
+            <div class="icon-circle">
+                <i class="fas fa-circle-info"></i>
+            </div>
+            <h3>Tips & Resources</h3>
+            <button class="explore-btn tips-btn"
+                    onclick="showLoaderAndRedirect('{{ url_for('tips_resources') }}')">
+                Explore
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- LOADER -->
+<div id="page-loader" class="loader-overlay">
+    <div class="loader"></div>
+    <p>Loading...</p>
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+
+body {
+    background: radial-gradient(circle at top left, #3b82f6, #0f172a);
+    font-family: 'Inter', sans-serif;
+    color: white;
+}
+
+.page-wrapper {
+    max-width: 1200px;
+    margin: auto;
+    padding: 45px 20px;
+    text-align: center;
+}
+
+.title {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+.suggestions-grid-fixed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+}
+
+.futuristic-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0px 15px 40px rgba(0,0,0,0.25);
+    transition: 0.4s ease;
+}
+
+.futuristic-card:hover {
+    transform: translateY(-8px) scale(1.03);
+}
+
+.icon-circle {
+    height: 68px;
+    width: 68px;
+    border-radius: 50%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    font-size: 28px;
+    box-shadow: 0 0 18px #60a5fa;
+}
+
+.score-bg .icon-circle {
+    background: linear-gradient(135deg,#22c55e,#0f9b4b);
+}
+
+.tips-bg .icon-circle {
+    background: linear-gradient(135deg,#fbbf24,#c47d00);
+}
+
+.explore-btn {
+    margin-top: 18px;
+    padding: 10px 22px;
+    background: transparent;
+    border: 2px solid #60a5fa;
+    border-radius: 25px;
+    color: #60a5fa;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.explore-btn:hover {
+    background: #60a5fa;
+    color: white;
+}
+
+.score-btn { border-color:#22c55e; color:#22c55e; }
+.score-btn:hover { background:#22c55e; color:white; }
+
+.tips-btn { border-color:#fbbf24; color:#fbbf24; }
+.tips-btn:hover { background:#fbbf24; color:black; }
+
+/* LOADER */
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.loader {
+    width: 55px;
+    height: 55px;
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top: 5px solid #60a5fa;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 900px) {
+    .suggestions-grid-fixed { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .suggestions-grid-fixed { grid-template-columns: 1fr; }
+    .title { font-size: 28px; }
+}
+</style>
+
+<script>
+function showLoaderAndRedirect(url) {
+    document.getElementById("page-loader").style.display = "flex";
+    setTimeout(() => {
+        window.location.href = url;
+    }, 300);
+}
+</script>
+
+{% endblock %}

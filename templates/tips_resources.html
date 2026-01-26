@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+.page-wrapper {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.info-card {
+    padding: 22px;
+    border-radius: 12px;
+    background: #eef5ff;
+    border-left: 6px solid #4d90fe;
+    margin-bottom: 25px;
+}
+
+.section-card {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 30px;
+}
+
+.section-card h2 {
+    margin-bottom: 15px;
+}
+
+.section-card ul {
+    padding-left: 0;
+}
+
+.section-card li {
+    list-style: none;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+
+.section-card li::before {
+    content: "✔";
+    color: #4d90fe;
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+.resource-links ul {
+    padding-left: 20px;
+}
+
+.resource-links li {
+    list-style: disc;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.resource-links a {
+    text-decoration: underline;
+    color: #1d4ed8; /* blue color for links */
+    font-weight: 500;
+}
+
+.resource-links a:hover {
+    color: #2563eb;
+    text-decoration: none;
+}
+</style>
+
+<div class="page-wrapper">
+
+    <h1 class="title">Tips & Resources for Net Zero Readiness</h1>
+
+    <!-- ABOUT SURVEY -->
+    <div class="info-card">
+        <h2>About the Survey / सर्वेक्षण के बारे में</h2>
+        <p>
+            This survey is conducted by <strong>IIT BHU</strong> to help MSMEs achieve the
+            <strong>Net Zero Emission (NZE)</strong> target set by the Government of India.
+            It enables MSMEs to improve sustainability, efficiency, and long-term profitability.
+        </p>
+        <p>
+            भारत सरकार द्वारा निर्धारित <strong>शून्य शुद्ध उत्सर्जन (NZE)</strong> लक्ष्य को प्राप्त करने में
+            एमएसएमई की सहायता हेतु यह सर्वेक्षण <strong>IIT BHU</strong> द्वारा किया जा रहा है।
+        </p>
+    </div>
+
+    <!-- MATURITY LEVEL -->
+    <div class="section-card">
+        <h2>Understanding Your Maturity Level</h2>
+        <p>
+            Your maturity level indicates how prepared your MSME is in adopting Net Zero practices,
+            energy efficiency, ESG reporting, and sustainable operations.
+        </p>
+        <ul>
+            <li><strong>Basic:</strong> Awareness stage, limited data, informal practices</li>
+            <li><strong>Developing:</strong> Initial planning, basic energy/resource controls</li>
+            <li><strong>Mature:</strong> Structured sustainability programs, monitoring systems</li>
+            <li><strong>Advanced:</strong> Industry leader, net-zero aligned strategy & reporting</li>
+        </ul>
+    </div>
+
+    <!-- ACTIONABLE TIPS -->
+    <div class="section-card">
+        <h2>Practical Tips for MSMEs</h2>
+        <ul>
+            <li>Start tracking electricity, fuel, and water consumption monthly</li>
+            <li>Replace inefficient motors, lighting, and compressors</li>
+            <li>Conduct periodic energy audits (internal or certified)</li>
+            <li>Train employees on energy-saving behaviors</li>
+            <li>Adopt digital record-keeping for ESG and compliance</li>
+            <li>Explore rooftop solar and waste heat recovery</li>
+        </ul>
+    </div>
+
+    <!-- GOVT POLICIES -->
+    <div class="section-card">
+        <h2>Government Policies & Schemes (India)</h2>
+        <ul>
+            <li>National Action Plan on Climate Change (NAPCC)</li>
+            <li>MSME Sustainable (ZED) Certification Scheme</li>
+            <li>Perform, Achieve & Trade (PAT) Scheme</li>
+            <li>Credit Linked Capital Subsidy Scheme (CLCSS)</li>
+            <li>Rooftop Solar Programme – MNRE</li>
+            <li>Green MSME Financing by SIDBI</li>
+        </ul>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="section-card resource-links">
+        <h2>Useful Resources & Learning Links</h2>
+
+        <ul>
+            <li><a href="https://www.msmemart.com" target="_blank">MSME Portal – Government of India</a></li>
+            <li><a href="https://www.beeindia.gov.in" target="_blank">Bureau of Energy Efficiency (BEE)</a></li>
+            <li><a href="https://www.mnre.gov.in" target="_blank">Ministry of New & Renewable Energy</a></li>
+            <li><a href="https://www.sidbi.in" target="_blank">SIDBI – Green Financing</a></li>
+            <li><a href="https://unfccc.int" target="_blank">UNFCCC – Climate Framework</a></li>
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}

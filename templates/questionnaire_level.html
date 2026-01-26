@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set cat = categories_as_levels[level|string] %}
+<h3 class="mb-4">{{ cat.name[current_lang] if current_lang in cat.name else cat.name['en'] }}</h3>
+
+<form method="POST" id="questionnaireForm">
+
+  {% for q in cat.questions %}
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">
+          <span class="badge bg-primary me-2">{{ loop.index }}</span>
+          {{ q.text[current_lang] if current_lang in q.text else q.text['en'] }}
+        </h5>
+
+        <select name="q_{{ q.id }}" id="q_{{ q.id }}" class="form-select mt-2" required>
+          <option value="" disabled selected>
+            {% if current_lang == 'hi' %} एक विकल्प चुनें {% else %} Select an option {% endif %}
+          </option>
+
+          {% for opt_key, opt_val in q.options.items() %}
+            {% set display_text = opt_val[current_lang] if (opt_val is mapping and current_lang in opt_val) else (opt_val['en'] if (opt_val is mapping and 'en' in opt_val) else opt_key) %}
+            <option value="{{ opt_key }}">{{ display_text }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="text-center mt-4">
+    <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#confirmSubmitModal">
+      {% if current_lang == 'hi' %} सबमिट करें {% else %} Submit {% endif %}
+    </button>
+  </div>
+
+</form>
+
+<!-- Bootstrap Confirmation Modal -->
+<div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-labelledby="confirmSubmitLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="confirmSubmitLabel">
+          {% if current_lang == 'hi' %} पुष्टि करें {% else %} Confirm {% endif %}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        {% if current_lang == 'hi' %}
+          क्या आप सुनिश्चित हैं कि आप सबमिट करना चाहते हैं?
+        {% else %}
+          Are you sure you want to submit?
+        {% endif %}
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          {% if current_lang == 'hi' %} रद्द करें {% else %} Cancel {% endif %}
+        </button>
+        <button type="button" class="btn btn-success" id="confirmSubmitButton">
+          {% if current_lang == 'hi' %} हाँ, सबमिट करें {% else %} Yes, Submit {% endif %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // When user clicks "Yes, Submit", actually submit the form
+  document.getElementById("confirmSubmitButton").addEventListener("click", function() {
+      document.getElementById("questionnaireForm").submit();
+  });
+</script>
+
+{% endblock %}

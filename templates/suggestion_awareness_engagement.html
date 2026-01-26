@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* ===============================
+   Suggestions Page Styling
+   =============================== */
+
+.suggestion-content p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+    color: #212529;
+}
+
+.suggestion-content h1,
+.suggestion-content h2,
+.suggestion-content h3 {
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+/* ===== PERFECT NUMBERED LIST ALIGNMENT ===== */
+.suggestion-content ol {
+    counter-reset: item;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.suggestion-content li {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.suggestion-content li::before {
+    counter-increment: item;
+    content: counter(item) ".";
+    font-weight: 600;
+    min-width: 28px;
+    color: #000;
+}
+
+/* Bold titles inside recommendations */
+.suggestion-content strong {
+    color: #000;
+}
+</style>
+
+<div class="container mt-4 mb-5">
+
+    <h2 class="fw-bold mb-3">Awareness & Engagement Suggestions</h2>
+
+    <div class="alert alert-info fs-5">
+        <strong>Score:</strong> {{ score }}/{{ max_score }}
+        <span class="ms-2">({{ "%.1f"|format(percentage) }}%)</span>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+
+            <h4 class="fw-bold mb-3">
+                Your Personalized Recommendations
+            </h4>
+
+            <!-- AI Markdown rendered as HTML -->
+            <div class="suggestion-content">
+                {{ suggestions | safe }}
+            </div>
+
+        </div>
+    </div>
+
+    <a href="/performance" class="btn btn-primary mt-4">
+        ⬅ Back to Performance Dashboard
+    </a>
+
+</div>
+
+{% endblock %}

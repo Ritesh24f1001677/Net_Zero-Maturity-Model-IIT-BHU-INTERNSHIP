@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to right, #e3f2fd, #e8eaf6);
+  margin: 0;
+}
+
+.resume-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.resume-card {
+  width: 100%;
+  max-width: 1000px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0px 8px 28px rgba(0,0,0,0.15);
+  padding: 50px 60px;
+  border-top: 12px solid #3949ab;
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(25px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+/******** TOP RESUME HEADER *********/
+.resume-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.resume-photo img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #3949ab;
+}
+
+.resume-name {
+  font-size: 36px;
+  font-weight: 700;
+  color: #222;
+}
+
+.resume-sub {
+  font-size: 15px;
+  background: #3949ab;
+  color: white;
+  padding: 5px 14px;
+  display: inline-block;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+/******* DIVIDER *********/
+.divider {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right,#3949ab,#90caf9,#3949ab);
+  border-radius: 5px;
+  margin: 25px 0;
+}
+
+/******** DETAIL SECTION ********/
+.section-title {
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: #1a237e;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.info-box {
+  background: #fafbff;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.07);
+  transition: 0.3s;
+}
+
+.info-box:hover {
+  background: #eef2ff;
+}
+
+.info-label {
+  font-size: 13px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+}
+
+.info-data {
+  font-size: 18px;
+  margin-top: 5px;
+  font-weight: 600;
+  color: #222;
+}
+
+.info-box i {
+  font-size: 20px;
+  color: #3949ab;
+  margin-right: 6px;
+}
+
+/***** MOBILE RESPONSIVE *******/
+@media(max-width: 850px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .resume-card {
+    padding: 35px 30px;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<div class="resume-container">
+<div class="resume-card">
+
+  <!-- HEADER -->
+  <div class="resume-header">
+    <div class="resume-photo">
+      <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="profile">
+    </div>
+    <div>
+      <div class="resume-name">{{ current_user.name }}</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title"><i class="fa-solid fa-id-card"></i> Profile Details</div>
+
+  <div class="info-grid">
+
+    <div class="info-box">
+      <span class="info-label"><i class="fa-solid fa-envelope"></i> Email</span>
+      <div class="info-data">{{ current_user.email }}</div>
+    </div>
+
+    <div class="info-box">
+      <span class="info-label"><i class="fa-solid fa-building"></i> Organization</span>
+      <div class="info-data">{{ current_user.step1 }}</div>
+    </div>
+
+    <div class="info-box">
+      <span class="info-label"><i class="fa-solid fa-industry"></i> Industry Type</span>
+      <div class="info-data">{{ current_user.step2 }}</div>
+    </div>
+
+    <div class="info-box">
+      <span class="info-label"><i class="fa-solid fa-users"></i> Employees</span>
+      <div class="info-data">{{ current_user.step3 }}</div>
+    </div>
+
+    <div class="info-box">
+      <span class="info-label"><i class="fa-solid fa-gas-pump"></i> Main Fuel</span>
+      <div class="info-data">{{ current_user.step4 }}</div>
+    </div>
+
+    <div class="info-box">
+      <span class="info-label"><i class="fa-solid fa-triangle-exclamation"></i> Primary Concern</span>
+      <div class="info-data">{{ current_user.step5 }}</div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+{% endblock %}

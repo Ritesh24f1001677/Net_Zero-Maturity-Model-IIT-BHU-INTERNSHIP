@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:flex; justify-content:center; align-items:center; min-height:80vh; padding:20px;">
+    <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); width:100%; max-width:450px;">
+        <h3 style="text-align:center; color:#0a3d62; margin-bottom:25px;">Login</h3>
+        <form method="post" action="{{ url_for('login') }}">
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:500;">Email / Username</label>
+                <input class="form-control" type="text" name="login_id" placeholder="Email or admin" required style="padding:10px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:500;">Password</label>
+                <input class="form-control" type="password" name="password" required style="padding:10px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <button class="btn" style="width:100%; background:#0a3d62; color:white; padding:12px; border-radius:8px; margin-top:10px;">Login</button>
+            <div style="text-align:center; margin-top:15px;">
+                <a href="{{ url_for('register') }}" style="color:#0a3d62; text-decoration:underline;">Register</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

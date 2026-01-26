@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% block content %}
+{% set t = translations %}
+{% set lang = session.get('lang', 'en') %}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark mb-2 mb-md-0 fs-3">
+      {{ t.performance }}
+    </h2>
+
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-outline-primary btn-sm" href="{{ url_for('questionnaire_index') }}">
+        <i class="bi bi-journal-text me-1"></i> {{ t.questionnaire }}
+      </a>
+
+      <a class="btn btn-success btn-sm {% if not start_new_enabled %}disabled{% endif %}"
+         href="{{ url_for('start_new_attempt') }}">
+        <i class="bi bi-arrow-repeat me-1"></i> Start New Attempt
+      </a>
+    </div>
+  </div>
+
+  {% if grouped_by_attempt %}
+    <div class="row g-4">
+
+      {% for attempt, responses in grouped_by_attempt.items() %}
+
+        {% set total_score = responses | sum(attribute='score') %}
+        {% set total_possible = responses | sum(attribute='score_max') %}
+
+        {% if total_score <= 9 %}
+          {% set final_level = 1 %}
+        {% elif total_score <= 18 %}
+          {% set final_level = 2 %}
+        {% elif total_score <= 27 %}
+          {% set final_level = 3 %}
+        {% else %}
+          {% set final_level = 4 %}
+        {% endif %}
+
+        {% set percentage = (total_score / total_possible * 100) if total_possible > 0 else 0 %}
+
+        <!-- ATTEMPT CARD -->
+        <div class="col-12 attempt-card">
+
+          <div class="card shadow-sm border-0 rounded-4 p-3 p-md-4 h-100">
+
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+              <h4 class="fw-bold mb-2 mb-md-0">
+                Attempt {{ attempt }}
+              </h4>
+
+              <span class="badge bg-primary fs-6 py-2 px-3">
+                Total: {{ "%.2f"|format(total_score) }} / {{ "%.2f"|format(total_possible) }}
+              </span>
+            </div>
+
+            <div class="alert alert-primary text-center fw-bold rounded-3 py-2 py-md-3">
+              <i class="bi bi-trophy-fill me-2"></i>
+              Level {{ final_level }}
+            </div>
+
+            <div class="progress rounded-pill mb-3" style="height: 20px;">
+              <div class="progress-bar bg-primary"
+                   role="progressbar"
+                   style="width: {{ percentage }}%;"
+                   aria-valuenow="{{ percentage }}"
+                   aria-valuemin="0"
+                   aria-valuemax="100">
+                {{ "%.1f"|format(percentage) }}%
+              </div>
+            </div>
+
+            <!-- GROUP DETAILS -->
+            <div class="row g-3 mt-3">
+
+              {% for r in responses %}
+                {% set level_percentage = (r.score / r.score_max * 100) if r.score_max > 0 else 0 %}
+
+                <div class="col-12 col-md-6">
+                  <div class="card h-100 border-0 shadow-sm rounded-3">
+
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center fw-bold">
+                      <div>
+                        {{ r.group_name }}
+                        {% if r.level_label %}
+                          - <span class="fw-normal">{{ r.level_label[lang] }}</span>
+                        {% endif %}
+                      </div>
+
+                      <span class="badge bg-secondary">
+                        {{ "%.2f"|format(r.score) }} / {{ "%.2f"|format(r.score_max) }}
+                      </span>
+                    </div>
+
+                    <div class="card-body p-2">
+                      <div class="progress rounded-pill" style="height: 15px;">
+                        <div class="progress-bar bg-success"
+                             role="progressbar"
+                             style="width: {{ level_percentage }}%;"
+                             aria-valuenow="{{ level_percentage }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                          {{ "%.1f"|format(level_percentage) }}%
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              {% endfor %}
+
+            </div>
+
+          </div>
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+    <!-- PAGINATION CONTROLS -->
+    <div class="d-flex justify-content-center align-items-center gap-3 mt-4" id="pagination-controls">
+      <button class="btn btn-outline-secondary btn-sm" id="prevBtn" disabled>
+        Previous
+      </button>
+
+      <span class="fw-bold" id="pageIndicator">Page 1</span>
+
+      <button class="btn btn-outline-secondary btn-sm" id="nextBtn">
+        Next
+      </button>
+    </div>
+
+  {% else %}
+    <div class="alert alert-secondary text-center shadow-sm fs-5 py-4 mt-5">
+      {% if lang == 'hi' %}
+        अभी कोई प्रदर्शन डेटा नहीं है। कृपया प्रश्नावली पूरी करें।
+      {% else %}
+        No performance data yet. Please complete the questionnaire.
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Animate progress bars
+  document.querySelectorAll(".progress-bar").forEach(bar => {
+    bar.style.transition = "width 1s ease-in-out";
+  });
+
+  // Pagination logic
+  const attemptsPerPage = 5;
+  const attemptCards = document.querySelectorAll(".attempt-card");
+  const totalAttempts = attemptCards.length;
+
+  let currentPage = 1;
+  const totalPages = Math.ceil(totalAttempts / attemptsPerPage);
+
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const pageIndicator = document.getElementById("pageIndicator");
+
+  function showPage(page) {
+    const start = (page - 1) * attemptsPerPage;
+    const end = start + attemptsPerPage;
+
+    attemptCards.forEach((card, index) => {
+      card.style.display = (index >= start && index < end) ? "block" : "none";
+    });
+
+    pageIndicator.textContent = `Page ${page} of ${totalPages}`;
+    prevBtn.disabled = page === 1;
+    nextBtn.disabled = page === totalPages;
+  }
+
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      showPage(currentPage);
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      showPage(currentPage);
+    }
+  });
+
+  showPage(currentPage);
+
+  if (totalAttempts <= attemptsPerPage) {
+    document.getElementById("pagination-controls").style.display = "none";
+  }
+
+});
+</script>
+{% endblock %}

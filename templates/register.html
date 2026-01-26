@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:flex; justify-content:center; align-items:center; min-height:80vh; padding:20px;">
+    <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); width:100%; max-width:500px;">
+        <h3 style="text-align:center; color:#0a3d62; margin-bottom:25px;">Register</h3>
+        <form method="post" action="{{ url_for('register') }}">
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:500;">Full Name</label>
+                <input class="form-control" name="name" required style="padding:10px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:500;">Email</label>
+                <input class="form-control" type="email" name="email" required style="padding:10px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-weight:500;">Password</label>
+                <input class="form-control" type="password" name="password" required minlength="6" style="padding:10px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <button class="btn" style="width:100%; background:#0a3d62; color:white; padding:12px; border-radius:8px; margin-top:10px;">Register</button>
+            <div style="text-align:center; margin-top:15px;">
+                <a href="{{ url_for('login') }}" style="color:#0a3d62; text-decoration:underline;">Already have an account?</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

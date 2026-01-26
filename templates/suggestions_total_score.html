@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+/* ===============================
+   Overall Suggestions Styling
+   =============================== */
+
+.score-card {
+    padding: 20px;
+    border-radius: 10px;
+    background: #eef5ff;
+    border-left: 6px solid #4d90fe;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.table {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+/* Suggestions box */
+.suggestion-box {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Markdown text polish */
+.suggestion-content p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+    color: #212529;
+}
+
+.suggestion-content h1,
+.suggestion-content h2,
+.suggestion-content h3 {
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+/* 🔥 PERFECT NUMBERED LIST ALIGNMENT */
+.suggestion-content ol {
+    counter-reset: item;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.suggestion-content li {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.suggestion-content li::before {
+    counter-increment: item;
+    content: counter(item) ".";
+    font-weight: 600;
+    min-width: 28px;
+    color: #000;
+}
+
+.suggestion-content strong {
+    color: #000;
+}
+</style>
+
+<div class="page-wrapper">
+
+    <h1 class="title">Overall Sustainability Performance Summary</h1>
+
+    <div class="score-card">
+        <h2>Total Score: {{ total_score }} / {{ total_max_score }}</h2>
+        <p style="font-size: 22px; font-weight: bold;">
+            Overall Performance: {{ overall_percentage|round(2) }}%
+        </p>
+    </div>
+
+    <h3 style="margin-top: 30px;">Breakdown by Sustainability Dimension</h3>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Level</th>
+                <th>Score</th>
+                <th>Max Score</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for level, data in level_scores.items() %}
+                <tr>
+                    <td>{{ level }}</td>
+                    <td>{{ data.score }}</td>
+                    <td>{{ data.max_score }}</td>
+                    <td>{{ data.percentage|round(2) }}%</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Your Strategic Recommendations</h2>
+
+    <div class="suggestion-box">
+        <!-- Markdown rendered HTML -->
+        <div class="suggestion-content">
+            {{ suggestions | safe }}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

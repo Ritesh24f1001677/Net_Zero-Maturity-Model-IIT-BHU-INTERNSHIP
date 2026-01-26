@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>{{ translations.onboard_title }}</h3>
+<p>Select language and fill quick steps</p>
+
+<form method="post">
+  <div class="row">
+    <div class="col-md-6">
+      <label class="form-label">Choose language:</label>
+      <select class="form-select" name="language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
+  </div>
+
+  <hr>
+  <!-- Steps simple UI: 5 fields -->
+  <div class="row">
+    <div class="col-md-6">
+      <label class="form-label">Step 1 - Organization name</label>
+      <input class="form-control" name="step1">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Step 2 - Industry type</label>
+      <input class="form-control" name="step2">
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-6">
+      <label class="form-label">Step 3 - Number of employees</label>
+      <input class="form-control" name="step3" type="number">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Step 4 - Main fuel type</label>
+      <input class="form-control" name="step4">
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-12">
+      <label class="form-label">Step 5 - Primary concern (short)</label>
+      <input class="form-control" name="step5">
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <button class="btn btn-success">{{ translations.start }}</button>
+  </div>
+</form>
+{% endblock %}
